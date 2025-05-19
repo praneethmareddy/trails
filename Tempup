@@ -1,0 +1,20 @@
+import os
+import pandas as pd
+from langchain.schema import Document  # or your custom Document class
+
+def load_template_documents_recursive(root_folder):
+    documents = []
+    for root, dirs, files in os.walk(root_folder):
+        for file in files:
+            if file.endswith(".csv"):
+                filepath = os.path.join(root, file)
+                try:
+                    df = pd.read_csv(filepath)
+                    content = df.to_string(index=False)  # Convert full CSV to readable string
+                    documents.append(Document(
+                        page_content=f"[{file}]\n{content}",
+                        metadata={"type": "template", "path": filepath}
+                    ))
+                except Exception as e:
+                    print(f"[!] Error reading template CSV {filepath}: {e}")
+    return documents
