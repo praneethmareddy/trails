@@ -1,0 +1,7 @@
+# Add previous conversation from memory
+conversation_history = ""
+messages = memory.chat_memory.messages
+for i in range(0, len(messages), 2):
+    user_msg = messages[i].content if i < len(messages) else ""
+    ai_msg = messages[i+1].content if i+1 < len(messages) else ""
+    conversation_history += f"User: {user_msg}\nAssistant: {ai_msg}\n"
